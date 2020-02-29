@@ -34,6 +34,7 @@ import numpy as np
 import copy
 import cv2
 import random
+import skimage.metrics
 
 def GaussianNoise(srcImg,percent,sigma,means=0,greyscale=256):   
     """
@@ -190,15 +191,40 @@ def UniformNoise(srcImg,a,b,percent,greyscale=256):
         NoiseImg[x,y]=fxy
     return NoiseImg
 
+def cal_SNR(img):
+    """
+    计算图像的SNR 使用方差法
+        :param img: 
+    """
+    snr=np.mean(img)/np.std(img)
+
+    return snr
+
+def cal_PSNR(img,img_n):
+    """
+    计算图像的PSNR  使用skimage 自带的方法
+        :param img: 原始图像
+        :param img_n: 噪声图像
+    """
+    return skimage.metrics.peak_signal_noise_ratio(img, img_n, data_range=255)
+
+def cal_SSIM(img,img_n):
+    """
+    计算图像的SSIM  使用skimage 自带的方法
+        :param img: 原始图像
+        :param img_n: 噪声图像
+    """
+    return skimage.metrics.structural_similarity(img, img_n, data_range=255)
+
 if __name__ == "__main__":
     img=cv2.imread('.\images\lenna.bmp',0) 
     cv2.imshow("original",img)
 
-    # 高斯噪声
-    # g_per,means,sigma=1.0,0,20
-    # gaussImg=GaussianNoise(img,g_per,sigma)
-    # cv2.imshow("guass",gaussImg)
-    #cv2.imwrite(".\images\GuassNoise_per{}_sigma{}_means{}_lenna.jpg".format(g_per,sigma,means),gaussImg)
+    #高斯噪声
+    g_per,means,sigma=1.0,0,20
+    gaussImg=GaussianNoise(img,g_per,sigma)
+    cv2.imshow("guass",gaussImg)
+    cv2.imwrite(".\images\GuassNoise_per{}_sigma{}_means{}_lenna.jpg".format(g_per,sigma,means),gaussImg)
 
     # 椒盐噪声
     # s_per,mode=0.5,"BOTH"
@@ -229,6 +255,11 @@ if __name__ == "__main__":
     # uniImg=UniformNoise(img,a,b,u_per)
     # cv2.imshow("Uniform",uniImg)
     # cv2.imwrite(".\images\GammaNoise_a{}_b{}_per{}_lenna.jpg".format(a,b,u_per),uniImg)
+    print(cal_SNR(img))
+    print(cal_SNR(gaussImg))
+
+    print(cal_PSNR(img,gaussImg))
+    print(cal_SSIM(img,gaussImg))
     
     cv2.waitKey()
 
