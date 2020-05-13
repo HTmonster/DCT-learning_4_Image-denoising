@@ -125,8 +125,6 @@ def GammaNoise(srcImg,k,theta,percent,greyscale=256):
     places=random.sample(range(h*w),int(percent*w*h))    #位置
     Gammas=np.random.gamma(k,theta,int(percent*w*h)) #伽马噪声
 
-    print(Gammas)
-
     for i in range(int(percent*w*h)):
         x,y=places[i]%w,places[i]//w # 坐标
         fxy=NoiseImg[x,y]+int(Gammas[i]) #加上噪声
@@ -217,49 +215,49 @@ def cal_SSIM(img,img_n):
     return skimage.metrics.structural_similarity(img, img_n, data_range=255)
 
 if __name__ == "__main__":
-    img=cv2.imread('.\images\lenna.bmp',0) 
-    cv2.imshow("original",img)
+    img=cv2.imread('.\images\original\lenna.bmp',0) 
+    # cv2.imshow("original",img)
 
     #高斯噪声
-    g_per,means,sigma=1.0,0,20
+    g_per,means,sigma=1.0,0,50
     gaussImg=GaussianNoise(img,g_per,sigma)
     cv2.imshow("guass",gaussImg)
-    cv2.imwrite(".\images\GuassNoise_per{}_sigma{}_means{}_lenna.jpg".format(g_per,sigma,means),gaussImg)
+    cv2.imwrite("./images/noise/GuassNoise_per{}_sigma{}_means{}_lenna.jpg".format(g_per,sigma,means),gaussImg)
 
     # 椒盐噪声
-    # s_per,mode=0.5,"BOTH"
+    # s_per,mode=0.08,"BOTH"
     # spImg=SaltPepperNoise(img,s_per)
     # cv2.imshow("SaltPepper",spImg)
-    #cv2.imwrite(".\images\SaltPepperNoise_per{}_mode{}_lenna.jpg".format(s_per,mode),spImg)
+    # cv2.imwrite("./images/noise/SaltPepperNoise_per{}_mode{}_lenna.jpg".format(s_per,mode),spImg)
 
     # 瑞利噪声
-    # scale,r_per=100,0.5
+    # scale,r_per=60,0.5
     # rayImg=RayleighNoise(img,scale,r_per)
     # cv2.imshow("Rayleigh",rayImg)
-    # cv2.imwrite(".\images\RayleighNoise_per{}_scale{}_lenna.jpg".format(r_per,scale),rayImg)
+    # cv2.imwrite("./images/noise/RayleighNoise_per{}_scale{}_lenna.jpg".format(r_per,scale),rayImg)
 
     # 伽马噪声
-    # k,theta,ga_per=100,2,0.5
+    # k,theta,ga_per=30,4,0.5
     # gammaImg=GammaNoise(img,k,theta,ga_per)
     # cv2.imshow("Gamma",gammaImg)
-    # cv2.imwrite(".\images\GammaNoise_k{}_theta{}_per{}_lenna.jpg".format(k,theta,ga_per),gammaImg)
+    # cv2.imwrite("./images/noise/GammaNoise_k{}_theta{}_per{}_lenna.jpg".format(k,theta,ga_per),gammaImg)
 
     # 指数噪声
-    # beta,e_per=100,0.5
+    # beta,e_per=50,0.5
     # expImg=ExponentialNoise(img,beta,e_per)
     # cv2.imshow("Exponential",expImg)
-    # cv2.imwrite(".\images\GammaNoise_beta{}_per{}_lenna.jpg".format(beta,e_per),expImg)
+    # cv2.imwrite("./images/noise/Exponential_beta{}_per{}_lenna.jpg".format(beta,e_per),expImg)
     
     # 均匀噪声
-    # a,b,u_per=0,50,0.5
+    # a,b,u_per=50,150,0.5
     # uniImg=UniformNoise(img,a,b,u_per)
     # cv2.imshow("Uniform",uniImg)
-    # cv2.imwrite(".\images\GammaNoise_a{}_b{}_per{}_lenna.jpg".format(a,b,u_per),uniImg)
-    print(cal_SNR(img))
-    print(cal_SNR(gaussImg))
+    # cv2.imwrite("./images/noise/UniformNoise_a{}_b{}_per{}_lenna.jpg".format(a,b,u_per),uniImg)
+    # print(cal_SNR(img))
+    # print(cal_SNR(gaussImg))
 
-    print(cal_PSNR(img,gaussImg))
-    print(cal_SSIM(img,gaussImg))
+    # print(cal_PSNR(img,gaussImg))
+    # print(cal_SSIM(img,gaussImg))
     
     cv2.waitKey()
 
