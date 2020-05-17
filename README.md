@@ -35,5 +35,5 @@
 | 均匀噪声 | <img src="images\noise\UniformNoise_a50_b150_per0.5_lenna.jpg" style="zoom:25%;" /> |
 
 #### 去噪效果展示
-![去噪效果](.\images\denoise\regKSVD_n50_iter200_12_10_25.png)
+![去噪效果](/images/denoise/regKSVD_n50_iter200_12_10_25.png)
 
